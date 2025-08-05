@@ -1,0 +1,12 @@
+name = "IEEE9BusEPICS"
+uuid = "d2e47893-2b50-4736-87fd-ec014471b102"
+authors = ["rodrigomha <rodrigomha@gmail.com>"]
+version = "0.1.0"
+
+[deps]
+PowerSystemCaseBuilder = "f00506e0-b84f-492a-93c2-c0a9afc4364e"
+PowerSystems = "bcd98974-b02a-5e2f-9ee0-a103f5c450dd"
+
+[compat]
+PowerSystemCaseBuilder = "=1.3.11"
+PowerSystems = "=4.6.2"
