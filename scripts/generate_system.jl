@@ -39,7 +39,5 @@ end
 
 set_units_base_system!(sys, "NATURAL_UNITS")
 add_load_time_series!(sys, rts_sys)
-
-
-
 update_operation_cost!(sys, rts_sys)
+to_json(sys, "saved_systems/ieee9_sienna.json"; force=true)
