@@ -101,3 +101,58 @@ plot([
         title = "Gas, PV and Wind case: Total Cost $(round(total_cost, digits=1))",
     ),
 )
+
+### Find Critical Days ###
+
+# Find hour with lowest thermal generation > 0: Min Inertia #
+p_th_sum = p_gen2 + p_gen3
+low_thermal_ixs = sortperm(p_th_sum)
+p_th_sum_sorted = p_th_sum[low_thermal_ixs]
+first_sorted_ix_positive = findfirst(x -> x>0.0, p_th_sum_sorted)
+num_hours_with_zero_thermal = first_sorted_ix_positive - 1
+ix_low_thermal = low_thermal_ixs[first_sorted_ix_positive]
+
+tstamp_low_thermal = tstamp[ix_low_thermal]
+gas_low_thermal = p_th_sum[ix_low_thermal]
+load_low_thermal = total_p_load[ix_low_thermal]
+wind_low_thermal = p_gen_wind[ix_low_thermal]
+pv_low_thermal = p_gen_pv[ix_low_thermal]
+
+# Find hour with lowest demand #
+p_load_sum = p_load5 + p_load6 + p_load8
+low_demand_ixs = sortperm(p_load_sum)
+p_load_sum_sorted = p_load_sum[low_demand_ixs]
+first_sorted_low_demand = 1
+ix_low_demand = low_demand_ixs[first_sorted_low_demand]
+
+tstamp_low_demand = tstamp[ix_low_demand]
+gas_low_demand = p_th_sum[ix_low_demand]
+load_low_demand = total_p_load[ix_low_demand]
+wind_low_demand = p_gen_wind[ix_low_demand]
+pv_low_demand = p_gen_pv[ix_low_demand]
+
+# Find hour with max demand #
+high_demand_ixs = sortperm(p_load_sum)
+p_load_sum_sorted = p_load_sum[high_demand_ixs]
+first_sorted_high_demand = length(p_load_sum_sorted)
+ix_high_demand = high_demand_ixs[first_sorted_high_demand]
+
+tstamp_high_demand = tstamp[ix_high_demand]
+gas_high_demand = p_th_sum[ix_high_demand]
+load_high_demand = p_load_sum[ix_high_demand]
+wind_high_demand = p_gen_wind[ix_high_demand]
+pv_high_demand = p_gen_pv[ix_high_demand]
+
+# Find hour with max thermal #
+high_thermal_ixs = sortperm(p_th_sum)
+p_th_sum_sorted = p_th_sum[high_thermal_ixs]
+first_sorted_high_thermal = length(p_th_sum_sorted)
+ix_high_thermal = high_thermal_ixs[first_sorted_high_thermal]
+
+tstamp_high_thermal = tstamp[ix_high_thermal]
+ct_high_thermal = p_gen2[ix_high_thermal]
+cc_high_thermal = p_gen3[ix_high_thermal]
+gas_high_thermal = p_th_sum[ix_high_thermal]
+load_high_thermal = total_p_load[ix_high_thermal]
+wind_high_thermal = p_gen_wind[ix_high_thermal]
+pv_high_thermal = p_gen_pv[ix_high_thermal]
