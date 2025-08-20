@@ -7,12 +7,14 @@ using PlotlyJS
 
 sys = System("saved_systems/ieee9_sienna.json")
 transform_single_time_series!(sys, Hour(24), Hour(24))
-p_flow_load = sum(get_max_active_power.(get_components(StandardLoad, sys))) * 100.0
+p_flow_load = sum(get_max_active_power.(get_components(StandardLoad, sys))) 
+th_max_power = sum(get_max_active_power.(get_components(ThermalStandard, sys)))
 
 solver = optimizer_with_attributes(HiGHS.Optimizer)
 template = ProblemTemplate(CopperPlatePowerModel)
 set_device_model!(template, StandardLoad, StaticPowerLoad)
 set_device_model!(template, ThermalStandard, ThermalDispatchNoMin)
+#set_device_model!(template, ThermalStandard, ThermalBasicUnitCommitment)
 
 models = SimulationModels(;
     decision_models = [
@@ -29,11 +31,11 @@ sequence = SimulationSequence(;
 
 sim = Simulation(;
     name = "ieee9-test",
-    steps = 30,
+    steps = 365,
     models = models,
     sequence = sequence,
     simulation_folder = mktempdir(),
-    initial_time = DateTime("2020-07-01T00:00:00"),
+    #initial_time = DateTime("2020-07-01T00:00:00"),
 )
 
 build!(sim)

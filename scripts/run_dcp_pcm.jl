@@ -44,6 +44,8 @@ results = SimulationResults(sim);
 uc_results = get_decision_problem_results(results, "UC")
 p_th = read_realized_variable(uc_results, "ActivePowerVariable__ThermalStandard")
 p_load = read_realized_parameter(uc_results, "ActivePowerTimeSeriesParameter__StandardLoad")
+cost_th = read_realized_expression(uc_results, "ProductionCostExpression__ThermalStandard")
+total_cost = sum(cost_th[!, "generator-3-1"]) + sum(cost_th[!, "generator-2-1"]) + sum(cost_th[!, "generator-1-1"])
 
 tstamp = p_th[!, 1]
 p_gen1 = p_th[!, "generator-1-1"]
@@ -59,21 +61,21 @@ plot([
         x = tstamp,
         y = p_gen1,
         mode = "lines",
-        name = "Generator 1",
-        line = attr(color = "blue"),
+        name = "Coal Gen",
+        line = attr(color = "brown"),
     ),
     scatter(
         x = tstamp,
         y = p_gen2,
         mode = "lines",
-        name = "Generator 2",
-        line = attr(color = "green"),
+        name = "CT Gen",
+        line = attr(color = "blue"),
     ),
     scatter(
         x = tstamp,
         y = p_gen3,
         mode = "lines",
-        name = "Generator 3",
+        name = "CC Gen",
         line = attr(color = "red"),
     ),
     scatter(
@@ -83,4 +85,8 @@ plot([
         name = "Total Load",
         line = attr(color = "black", dash = "dot"),
     )
-])
+], Layout(
+        yaxis_title="Active Power [MW]",
+        title = "Coal and Gas case: Total Cost $(round(total_cost, digits=1))",
+    ),
+)

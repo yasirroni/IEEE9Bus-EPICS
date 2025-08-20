@@ -7,6 +7,8 @@ rts_sys = build_system(PSISystems, "modified_RTS_GMLC_DA_sys_noForecast"; force_
 function update_operation_cost!(sys, rts_sys)
     gen_names = ["generator-1-1", "generator-2-1", "generator-3-1"]
     rts_gen_names = ["101_STEAM_4", "213_CT_1", "321_CC_1"]
+    fuel_types = [ThermalFuels.COAL, ThermalFuels.NATURAL_GAS, ThermalFuels.NATURAL_GAS]
+    prime_movers = [PrimeMovers.ST, PrimeMovers.CT, PrimeMovers.CC]
     for (ix, gen_name) in enumerate(gen_names)
         gen = get_component(ThermalStandard, sys, gen_name)
         rts_gen = get_component(ThermalStandard, rts_sys, rts_gen_names[ix])
@@ -23,6 +25,8 @@ function update_operation_cost!(sys, rts_sys)
             shut_down = rts_gen.operation_cost.shut_down,
         )
         set_operation_cost!(gen, new_op_cost)
+        set_prime_mover_type!(gen, prime_movers[ix])
+        set_fuel!(gen, fuel_types[ix])
     end
 end
 
@@ -37,7 +41,57 @@ function add_load_time_series!(sys, rts_sys)
     end
 end
 
+function add_renewable_generators!(sys, rts_sys)
+    coal_gen = get_component(ThermalStandard, sys, "generator-1-1")
+    solar = RenewableDispatch(;
+        name = "PV_Bus_1",
+        available = false,
+        bus = get_bus(coal_gen),
+        active_power = 0.0,
+        reactive_power = 0.0,
+        rating = 1.25, # 125 MW Plant
+        prime_mover_type = PrimeMovers.PVe,
+        reactive_power_limits = (min = -0.5, max = 0.5),
+        power_factor = 1.0,
+        operation_cost = RenewableGenerationCost(nothing),
+        base_power = 100.0,
+    )
+    wind = RenewableDispatch(;
+        name = "Wind_Bus_1",
+        available = false,
+        bus = get_bus(coal_gen),
+        active_power = 0.0,
+        reactive_power = 0.0,
+        rating = 1.25, # 125 MW plant
+        prime_mover_type = PrimeMovers.WT,
+        reactive_power_limits = (min = -0.5, max = 0.5),
+        power_factor = 1.0,
+        operation_cost = RenewableGenerationCost(nothing),
+        base_power = 100.0,
+    )
+    add_component!(sys, solar)
+    add_component!(sys, wind)
+
+    gen_names = ["PV_Bus_1", "Wind_Bus_1"]
+    rts_gen_names = ["101_PV_1", "122_WIND_1"]
+    for (ix, gen_name) in enumerate(gen_names)
+        gen = get_component(RenewableDispatch, sys, gen_name)
+        rts_gen = get_component(RenewableDispatch, rts_sys, rts_gen_names[ix])
+        ts_array = get_time_series_array(SingleTimeSeries, rts_gen, "max_active_power"; ignore_scaling_factors = true)
+        add_time_series!(sys, gen, SingleTimeSeries(; name = "max_active_power", data = ts_array, scaling_factor_multiplier = get_max_active_power))
+    end
+end
+
 set_units_base_system!(sys, "NATURAL_UNITS")
 add_load_time_series!(sys, rts_sys)
 update_operation_cost!(sys, rts_sys)
 to_json(sys, "saved_systems/ieee9_sienna.json"; force=true)
+
+add_renewable_generators!(sys, rts_sys)
+coal_gen = get_component(ThermalStandard, sys, "generator-1-1")
+pv_gen = get_component(RenewableDispatch, sys, "PV_Bus_1")
+wind_gen = get_component(RenewableDispatch, sys, "Wind_Bus_1")
+set_available!(coal_gen, false)
+set_available!(pv_gen, true)
+set_available!(wind_gen, true)
+to_json(sys, "saved_systems/ieee9_sienna_with_renewable.json"; force=true)
