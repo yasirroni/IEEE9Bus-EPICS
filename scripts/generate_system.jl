@@ -1,7 +1,7 @@
 using PowerSystems
 using PowerSystemCaseBuilder
 
-sys = System("raw_data/ieee9_v32.raw")
+sys = System("raw_data/Escenarios/Original/ieee9_v32.raw")
 rts_sys = build_system(PSISystems, "modified_RTS_GMLC_DA_sys_noForecast"; force_build = true)
 
 function update_operation_cost!(sys, rts_sys)
@@ -95,3 +95,31 @@ set_available!(coal_gen, false)
 set_available!(pv_gen, true)
 set_available!(wind_gen, true)
 to_json(sys, "saved_systems/ieee9_sienna_with_renewable.json"; force=true)
+
+
+function add_storage!(sys)
+    coal_gen = get_component(ThermalStandard, sys, "generator-1-1")
+    storage = EnergyReservoirStorage(
+        name = "Storage_Bus_1",
+        available = true,
+        bus = coal_gen.bus,
+        prime_mover_type = PrimeMovers.OT,
+        storage_technology_type = StorageTech.LIB,
+        storage_capacity = 4.0, # 400 MWh,
+        storage_level_limits = (min = 0.0, max = 1.0),
+        initial_storage_capacity_level = 0.5,
+        rating = 1.0, # 100 MW,
+        active_power = 0.0,
+        input_active_power_limits = (min = 0.0, max = 1.0), # 100 MW
+        output_active_power_limits = (min = 0.0, max = 1.0), # 100 MW
+        efficiency = (in = 0.93, out = 0.93),
+        reactive_power = 0.0,
+        reactive_power_limits = (min = -1.0, max = 1.0),
+        base_power = 100.0,
+    )
+    add_component!(sys, storage)
+end
+
+add_storage!(sys)
+to_json(sys, "saved_systems/ieee9_sienna_with_storage.json"; force=true)
+
