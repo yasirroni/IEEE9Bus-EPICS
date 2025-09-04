@@ -24,6 +24,10 @@ const PF = PowerFlows
 raw_path = "raw_data/Escenarios/RTS_Esc625MW.raw"
 dyr_path = "raw_data/RTS_CtrlsModified_STAB1.dyr"
 sys = System(raw_path, dyr_path)
+for l in get_components(StandardLoad, sys)
+    transform_load_to_constant_impedance(l)
+end
+
 
 ########################
 ### Simulation Setup ###
@@ -38,7 +42,8 @@ gen1 = get_component(DynamicInjection, sys, "generator-1-1")
 perturbation_gen = GeneratorTrip(10.0, gen1)
 
 sim = Simulation(
-    ResidualModel, # Type of formulation: Residual for using Sundials with IDA
+    #ResidualModel, # Type of formulation: Residual for using Sundials with IDA
+    MassMatrixModel,
     sys, # System
     mktempdir(), # Output directory
     time_span,
@@ -49,7 +54,7 @@ sim = Simulation(
 
 show_states_initial_value(sim)
 
-execute!(sim, IDA(), dtmax = 0.02, abstol = 1e-6, reltol = 1e-6)
+execute!(sim, Rodas5(), dtmax = 0.02, abstol = 1e-6, reltol = 1e-6)
 
 results = read_results(sim)
 t, v = get_voltage_magnitude_series(results, 7)
