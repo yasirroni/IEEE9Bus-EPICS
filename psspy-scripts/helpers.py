@@ -396,9 +396,9 @@ def run_psse_simulation(contingency_name, case_folder, sav_file, dyr_file, out_f
         ierr[4] = psspy.cong(0)
         
         # Convert loads to constant impedance
-        ierr[5] = psspy.conl(0, 1, 1, [0, 0], [0.0, 100.0, 0.0, 0.0])
-        ierr[6] = psspy.conl(0, 1, 2, [0, 0], [0.0, 100.0, 0.0, 0.0])
-        ierr[7] = psspy.conl(0, 1, 3, [0, 0], [0.0, 100.0, 0.0, 0.0])
+        ierr[5] = psspy.conl(1, 1, 1, [0, 0], [0.0, 100.0, 0.0, 100.0])
+        ierr[6] = psspy.conl(1, 1, 2, [0, 0], [0.0, 100.0, 0.0, 100.0])
+        ierr[7] = psspy.conl(1, 1, 3, [0, 0], [0.0, 100.0, 0.0, 100.0])
         ierr[8] = psspy.ordr(1)
         ierr[9] = psspy.fact()
         ierr[10] = psspy.tysl(0)
