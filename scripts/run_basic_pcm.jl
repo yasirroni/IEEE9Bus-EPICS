@@ -76,11 +76,16 @@ plot([
         name = "Generator 3",
         line = attr(color = "red"),
     ),
-    scatter(
-        x = tstamp,
-        y = total_p_load,
-        mode = "lines",
-        name = "Total Load",
-        line = attr(color = "black", dash = "dot"),
-    )
-])
+    #scatter(
+    #    x = tstamp,
+    #    y = total_p_load,
+    #    mode = "lines",
+    #    name = "Total Load",
+    #    line = attr(color = "black", dash = "dash"),
+    #)
+], Layout(
+    title = "Thermal Generation Dispatch Over Time",
+    xaxis = attr(title = "Time"),
+    yaxis = attr(title = "Active Power (MW)"),
+    template = "plotly_white",
+))
