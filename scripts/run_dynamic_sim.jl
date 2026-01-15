@@ -20,8 +20,8 @@ const PF = PowerFlows
 ### Data Exploring ###
 ######################
 
-#raw_path = "raw_data/Escenarios/RTS_Esc487MW.raw"
-raw_path = "raw_data/Escenarios/RTS_Esc625MW.raw"
+#raw_path = "raw_data/scenarios/RTS_Esc487MW.raw"
+raw_path = "raw_data/scenarios/RTS_Esc625MW.raw"
 dyr_path = "raw_data/RTS_CtrlsModified_STAB1.dyr"
 sys = System(raw_path, dyr_path)
 for l in get_components(StandardLoad, sys)

@@ -1,7 +1,7 @@
 using PowerSystems
 using PowerSystemCaseBuilder
 
-sys = System("raw_data/Escenarios/Original/ieee9_v32.raw")
+sys = System("raw_data/scenarios/Original/ieee9_v32.raw")
 rts_sys = build_system(PSISystems, "modified_RTS_GMLC_DA_sys_noForecast"; force_build = true)
 
 function update_operation_cost!(sys, rts_sys)

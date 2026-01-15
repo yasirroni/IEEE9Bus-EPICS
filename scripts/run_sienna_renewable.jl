@@ -22,7 +22,7 @@ const PF = PowerFlows
 ### Data Exploring ###
 ######################
 
-raw_path = "raw_data/Escenarios/RTS_Esc487MW.raw"
+raw_path = "raw_data/scenarios/RTS_Esc487MW.raw"
 dyr_path = "raw_data/RTS_CtrlsModified_RE.dyr"
 sys = System(raw_path, dyr_path)
 
