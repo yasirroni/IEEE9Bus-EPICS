@@ -12,10 +12,10 @@ p_flow_load = sum(get_max_active_power.(get_components(StandardLoad, sys))) * 10
 
 solver = optimizer_with_attributes(HiGHS.Optimizer)
 template = ProblemTemplate(DCPPowerModel)
-set_device_model!(template, StandardLoad, StaticPowerLoad)
-set_device_model!(template, ThermalStandard, ThermalDispatchNoMin)
-set_device_model!(template, Line, StaticBranch)
-set_device_model!(template, Transformer2W, StaticBranch)
+PSI.set_device_model!(template, StandardLoad, StaticPowerLoad)
+PSI.set_device_model!(template, ThermalStandard, ThermalDispatchNoMin)
+PSI.set_device_model!(template, Line, StaticBranch)
+PSI.set_device_model!(template, Transformer2W, StaticBranch)
 
 models = SimulationModels(;
     decision_models = [

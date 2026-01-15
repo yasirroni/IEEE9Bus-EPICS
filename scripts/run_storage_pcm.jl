@@ -14,11 +14,11 @@ th_max_power = sum(get_max_active_power.(get_components(ThermalStandard, sys)))
 
 solver = optimizer_with_attributes(HiGHS.Optimizer)
 template = ProblemTemplate(CopperPlatePowerModel)
-set_device_model!(template, StandardLoad, StaticPowerLoad)
-set_device_model!(template, ThermalStandard, ThermalDispatchNoMin)
-set_device_model!(template, RenewableDispatch, RenewableFullDispatch)
-set_device_model!(template, EnergyReservoirStorage, StorageDispatchWithReserves)
-#set_device_model!(template, ThermalStandard, ThermalBasicUnitCommitment)
+PSI.set_device_model!(template, StandardLoad, StaticPowerLoad)
+PSI.set_device_model!(template, ThermalStandard, ThermalDispatchNoMin)
+PSI.set_device_model!(template, RenewableDispatch, RenewableFullDispatch)
+PSI.set_device_model!(template, EnergyReservoirStorage, StorageDispatchWithReserves)
+#PSI.set_device_model!(template, ThermalStandard, ThermalBasicUnitCommitment)
 
 models = SimulationModels(;
     decision_models = [
