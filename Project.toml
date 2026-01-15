@@ -13,6 +13,7 @@ PowerSimulations = "e690365d-45e2-57bb-ac84-44ba829e73c4"
 PowerSimulationsDynamics = "398b2ede-47ed-4edc-b52e-69e4a48b4336"
 PowerSystemCaseBuilder = "f00506e0-b84f-492a-93c2-c0a9afc4364e"
 PowerSystems = "bcd98974-b02a-5e2f-9ee0-a103f5c450dd"
+SiennaPRASInterface = "4b496c86-8d00-441d-b504-079c710e0aa7"
 StorageSystemsSimulations = "e2f1a126-19d0-4674-9252-42b2384f8e3c"
 Sundials = "c3572dad-4567-51f8-b174-8c6c989267f4"
 
