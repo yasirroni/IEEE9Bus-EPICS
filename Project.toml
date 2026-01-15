@@ -17,7 +17,7 @@ Sundials = "c3572dad-4567-51f8-b174-8c6c989267f4"
 
 [compat]
 HiGHS = "1.19.0"
-OrdinaryDiffEq = "6.101.0"
+OrdinaryDiffEq = "=6.103.0"
 PowerFlows = "=0.9.0"
 PowerNetworkMatrices = "=0.12.1"
 PowerSimulations = "=0.30.2"
