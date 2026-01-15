@@ -41,7 +41,7 @@ perturbation_change = ControlReferenceChange(10.0, gen, :P_ref, 0.7)
 gen1 = get_component(DynamicInjection, sys, "generator-1-1")
 perturbation_gen = GeneratorTrip(10.0, gen1)
 
-sim = Simulation(
+sim = PSID.Simulation(
     #ResidualModel, # Type of formulation: Residual for using Sundials with IDA
     MassMatrixModel,
     sys, # System
@@ -54,7 +54,7 @@ sim = Simulation(
 
 show_states_initial_value(sim)
 
-execute!(sim, Rodas5(), dtmax = 0.02, abstol = 1e-6, reltol = 1e-6)
+PSID.execute!(sim, Rodas5(), dtmax = 0.02, abstol = 1e-6, reltol = 1e-6)
 
 results = read_results(sim)
 t, v = get_voltage_magnitude_series(results, 7)

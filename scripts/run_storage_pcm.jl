@@ -5,6 +5,7 @@ using StorageSystemsSimulations
 using Dates
 using HiGHS
 using PlotlyJS
+const PSI = PowerSimulations
 
 sys = System("saved_systems/ieee9_sienna_with_storage.json")
 transform_single_time_series!(sys, Hour(72), Hour(24))
@@ -32,7 +33,7 @@ sequence = SimulationSequence(;
     feedforwards = feedforward,
 )
 
-sim = Simulation(;
+sim = PSI.Simulation(;
     name = "ieee9-test",
     steps = 360,
     models = models,
@@ -42,8 +43,8 @@ sim = Simulation(;
 )
 
 build!(sim)
-execute!(sim; enable_progress_bar = true)
-results = SimulationResults(sim);
+PSI.execute!(sim; enable_progress_bar = true)
+results = PSI.SimulationResults(sim);
 uc_results = get_decision_problem_results(results, "UC")
 p_th = read_realized_variable(uc_results, "ActivePowerVariable__ThermalStandard")
 p_load = read_realized_parameter(uc_results, "ActivePowerTimeSeriesParameter__StandardLoad")
