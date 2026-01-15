@@ -40,7 +40,7 @@ end
 time_span = (0.0, 20.0)
 perturbation_trip = BranchTrip(1.0, Line, "BUS5-BUS7-i_1")
 
-sim = Simulation(
+sim = PSID.Simulation(
     ResidualModel, # Type of formulation: Residual for using Sundials with IDA
     sys, # System
     mktempdir(), # Output directory
@@ -53,7 +53,7 @@ sim = Simulation(
 
 show_states_initial_value(sim)
 
-execute!(sim, IDA(), dtmax = 0.02, abstol = 1e-6, reltol = 1e-6, saveat = 0.01)
+PSID.execute!(sim, IDA(), dtmax = 0.02, abstol = 1e-6, reltol = 1e-6, saveat = 0.01)
 
 results = read_results(sim)
 
@@ -113,7 +113,7 @@ gen = get_component(DynamicGenerator, sys, "generator-2-1")
 perturbation_change = ControlReferenceChange(0.5, gen, :P_ref, 0.764) # Trying to figure out why this number works
 
 
-sim = Simulation(
+sim = PSID.Simulation(
     ResidualModel, # Type of formulation: Residual for using Sundials with IDA
     sys, # System
     mktempdir(), # Output directory
@@ -124,7 +124,7 @@ sim = Simulation(
 
 show_states_initial_value(sim)
 
-execute!(sim, IDA(), dtmax = 0.02, abstol = 1e-6, reltol = 1e-6, saveat = 0.02)
+PSID.execute!(sim, IDA(), dtmax = 0.02, abstol = 1e-6, reltol = 1e-6, saveat = 0.02)
 
 results = read_results(sim)
 

@@ -40,7 +40,7 @@ end
 time_span = (0.0, 20.0)
 perturbation_trip = BranchTrip(0.5, Line, "BUS5-BUS7-i_1")
 
-sim = Simulation(
+sim = PSID.Simulation(
     ResidualModel, # Type of formulation: Residual for using Sundials with IDA
     sys, # System
     mktempdir(), # Output directory
@@ -53,7 +53,7 @@ sim = Simulation(
 
 show_states_initial_value(sim)
 
-execute!(sim, IDA(), dtmax = 0.02, abstol = 1e-6, reltol = 1e-6)
+PSID.execute!(sim, IDA(), dtmax = 0.02, abstol = 1e-6, reltol = 1e-6)
 
 results = read_results(sim)
 
