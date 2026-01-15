@@ -34,7 +34,7 @@ pf["bus_results"]
 #### BranchTrip ####
 time_span = (0.0, 20.0)
 perturbation_trip = BranchTrip(1.0, Line, "BUS5-BUS7-i_1")
-gen = get_component(StaticInjection, sys, "generator-2-1")
+gen = get_component(DynamicInjection, sys, "generator-2-1")
 perturbation_change = ControlReferenceChange(11.0, gen, :P_ref, 0.7)
 gen1 = get_component(DynamicInjection, sys, "generator-1-1")
 perturbation_gen = GeneratorTrip(1.0, gen1)
