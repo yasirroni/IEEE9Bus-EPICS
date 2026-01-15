@@ -1,5 +1,4 @@
 name = "IEEE9BusEPICS"
-uuid = "d2e47893-2b50-4736-87fd-ec014471b102"
 authors = ["rodrigomha <rodrigomha@gmail.com>"]
 version = "0.1.0"
 
